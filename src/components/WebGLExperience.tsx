@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface WebGLExperienceProps {
   onReady?: () => void;
@@ -13,9 +14,33 @@ export const launchToTheMoon = () => {
   }
 };
 
+const degenPhrases = [
+  "gm ser 🌅",
+  "wen moon? 🚀",
+  "WAGMI fam 💎",
+  "diamond hands only 💎🙌",
+  "LFG!!! 🔥",
+  "This is the way 🫡",
+  "not financial advice ser 👀",
+  "bullish af 📈",
+  "ngmi if you sell 📉",
+  "dev do something 👨‍💻",
+  "ser wen airdrop? 🪂",
+  "probably nothing... 👀",
+  "few understand 🧠",
+  "HODL strong 💪",
+  "to the moon! 🌙",
+  "lambo wen? 🏎️",
+  "trust the process 🙏",
+  "this is early 🎯",
+  "still early ser ⏰",
+  "we're so back 📈"
+];
+
 export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [speechBubble, setSpeechBubble] = useState<string | null>(null);
   const sceneRef = useRef<{
     scene: THREE.Scene;
     camera: THREE.PerspectiveCamera;
@@ -280,14 +305,30 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
     };
 
     const handleMouseMoveForCreature = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth) * 2 - 1;
-      const y = -(e.clientY / window.innerHeight) * 2 + 1;
+      if (!sceneRef.current?.isDragging) {
+        const x = (e.clientX / window.innerWidth) * 2 - 1;
+        const y = -(e.clientY / window.innerHeight) * 2 + 1;
 
-      mouseTargetX = x * 3;
-      mouseTargetY = y * 2;
+        mouseTargetX = x * 3;
+        mouseTargetY = y * 2;
+      }
     };
 
-    window.addEventListener('mousemove', handleMouseMoveForCreature);
+    const showRandomPhrase = () => {
+      const randomPhrase = degenPhrases[Math.floor(Math.random() * degenPhrases.length)];
+      setSpeechBubble(randomPhrase);
+      setTimeout(() => {
+        setSpeechBubble(null);
+      }, 3000);
+    };
+
+    const phraseInterval = setInterval(() => {
+      if (!isToTheMoon && Math.random() > 0.3) {
+        showRandomPhrase();
+      }
+    }, 8000);
+
+    setTimeout(() => showRandomPhrase(), 2000);
 
     animate();
 
@@ -307,6 +348,7 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
     };
 
     const handleMouseMove = (e: MouseEvent) => {
+      handleMouseMoveForCreature(e);
       if (sceneRef.current && sceneRef.current.isDragging) {
         const deltaX = e.clientX - sceneRef.current.previousMousePosition.x;
         const deltaY = e.clientY - sceneRef.current.previousMousePosition.y;
@@ -368,13 +410,13 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('mousemove', handleMouseMoveForCreature);
       renderer.domElement.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
       renderer.domElement.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
+      clearInterval(phraseInterval);
       triggerToTheMoonAnimation = null;
 
       if (container && renderer.domElement && container.contains(renderer.domElement)) {
@@ -391,6 +433,25 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
           <div className="text-blue-400 text-2xl animate-pulse">Loading Experience...</div>
         </div>
       )}
+      <AnimatePresence>
+        {speechBubble && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10"
+            style={{ marginTop: '-120px', marginLeft: '100px' }}
+          >
+            <div className="relative">
+              <div className="bg-white/95 backdrop-blur-sm text-gray-900 px-6 py-3 rounded-2xl shadow-2xl border-2 border-blue-500 font-bold text-lg">
+                {speechBubble}
+              </div>
+              <div className="absolute -bottom-2 left-8 w-4 h-4 bg-white/95 rotate-45 border-r-2 border-b-2 border-blue-500"></div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
