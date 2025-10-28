@@ -221,8 +221,10 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
     let isToTheMoon = false;
     let scrollTargetX = 0;
     let scrollTargetY = 0;
+    let scrollTargetZ = 0;
     let cardTargetX = 0;
     let cardTargetY = 0;
+    let cardTargetZ = 2;
     let isHoveringCard = false;
 
     triggerToTheMoonAnimation = () => {
@@ -272,8 +274,10 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
         } else {
           const targetX = isHoveringCard ? cardTargetX : scrollTargetX;
           const targetY = isHoveringCard ? cardTargetY : scrollTargetY;
+          const targetZ = isHoveringCard ? cardTargetZ : scrollTargetZ;
           creature.position.x += (targetX - creature.position.x) * 0.1;
           creature.position.y += (targetY - creature.position.y) * 0.1;
+          creature.position.z += (targetZ - creature.position.z) * 0.1;
         }
 
         asteroids.forEach((asteroid, i) => {
@@ -315,11 +319,14 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
 
       const startX = 0;
       const startY = 0;
+      const startZ = 0;
       const endX = 4;
       const endY = -3;
+      const endZ = 0;
 
       scrollTargetX = startX + (endX - startX) * scrollProgress;
       scrollTargetY = startY + (endY - startY) * scrollProgress;
+      scrollTargetZ = startZ + (endZ - startZ) * scrollProgress;
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -336,6 +343,7 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
 
       cardTargetX = x;
       cardTargetY = y;
+      cardTargetZ = 2;
     };
 
     const handleCardHover = () => {
