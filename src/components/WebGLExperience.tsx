@@ -325,20 +325,25 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
     window.addEventListener('scroll', handleScroll);
     handleScroll();
 
+    const updateCardPosition = (card: Element) => {
+      const rect = card.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const aspectRatio = window.innerWidth / window.innerHeight;
+      const x = ((centerX / window.innerWidth) * 2 - 1) * aspectRatio * 5;
+      const y = (-(centerY / window.innerHeight) * 2 + 1) * 5;
+
+      cardTargetX = x;
+      cardTargetY = y;
+    };
+
     const handleCardHover = () => {
       const cards = document.querySelectorAll('[data-tech-card]');
 
       cards.forEach((card, index) => {
         const handleMouseEnter = () => {
-          const rect = card.getBoundingClientRect();
-          const centerX = rect.left + rect.width / 2;
-          const centerY = rect.top + rect.height / 2;
-
-          const x = (centerX / window.innerWidth) * 2 - 1;
-          const y = -(centerY / window.innerHeight) * 2 + 1;
-
-          cardTargetX = x * 3;
-          cardTargetY = y * 2;
+          updateCardPosition(card);
           isHoveringCard = true;
           setHoveredCard(index);
         };
@@ -348,12 +353,30 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
           setHoveredCard(null);
         };
 
+        const handleMouseMove = () => {
+          if (isHoveringCard) {
+            updateCardPosition(card);
+          }
+        };
+
         card.addEventListener('mouseenter', handleMouseEnter);
         card.addEventListener('mouseleave', handleMouseLeave);
+        card.addEventListener('mousemove', handleMouseMove);
       });
     };
 
     setTimeout(handleCardHover, 1000);
+
+    window.addEventListener('scroll', () => {
+      if (isHoveringCard) {
+        const cards = document.querySelectorAll('[data-tech-card]');
+        cards.forEach(card => {
+          if (card.matches(':hover')) {
+            updateCardPosition(card);
+          }
+        });
+      }
+    });
 
     const showRandomPhrase = () => {
       const randomPhrase = degenPhrases[Math.floor(Math.random() * degenPhrases.length)];
