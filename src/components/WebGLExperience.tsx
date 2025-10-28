@@ -147,6 +147,31 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
     }
     scene.add(particles);
 
+    const asteroids: THREE.Mesh[] = [];
+    const asteroidGeometry = new THREE.IcosahedronGeometry(0.3, 0);
+    const asteroidMaterial = new THREE.MeshPhongMaterial({
+      color: 0x8b7355,
+      flatShading: true
+    });
+
+    for (let i = 0; i < 15; i++) {
+      const asteroid = new THREE.Mesh(asteroidGeometry, asteroidMaterial);
+      asteroid.position.set(
+        (Math.random() - 0.5) * 25,
+        Math.random() * 15 + 5,
+        (Math.random() - 0.5) * 15
+      );
+      asteroid.rotation.set(
+        Math.random() * Math.PI,
+        Math.random() * Math.PI,
+        Math.random() * Math.PI
+      );
+      const scale = Math.random() * 0.5 + 0.5;
+      asteroid.scale.set(scale, scale, scale);
+      asteroids.push(asteroid);
+      scene.add(asteroid);
+    }
+
     sceneRef.current = {
       scene,
       camera,
@@ -158,6 +183,10 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
 
     let blinkTimer = 0;
     let isBlinking = false;
+    let blastOffTimer = 0;
+    let isBlastingOff = false;
+    let blastOffPhase = 0;
+    const originalCreatureZ = 0;
 
     const animate = () => {
       requestAnimationFrame(animate);
@@ -168,13 +197,52 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
         leftRocket.rotation.z = Math.sin(Date.now() * 0.003) * 0.1 + 0.2;
         rightRocket.rotation.z = Math.sin(Date.now() * 0.003) * -0.1 - 0.2;
 
+        blastOffTimer++;
+        if (blastOffTimer > 300 && !isBlastingOff) {
+          isBlastingOff = true;
+          blastOffPhase = 0;
+        }
+
+        if (isBlastingOff) {
+          blastOffPhase++;
+          if (blastOffPhase < 120) {
+            creature.position.z -= 0.15;
+            creature.position.y += Math.sin(blastOffPhase * 0.05) * 0.02;
+            leftFlame.scale.y = 2 + Math.sin(blastOffPhase * 0.3) * 0.5;
+            rightFlame.scale.y = 2 + Math.sin(blastOffPhase * 0.3) * 0.5;
+          } else if (blastOffPhase < 180) {
+            const returnProgress = (blastOffPhase - 120) / 60;
+            creature.position.z = -18 + (returnProgress * 18);
+            creature.position.y = Math.sin(returnProgress * Math.PI) * 2;
+          } else {
+            creature.position.z = originalCreatureZ;
+            creature.position.y = 0;
+            leftFlame.scale.y = 1;
+            rightFlame.scale.y = 1;
+            isBlastingOff = false;
+            blastOffTimer = 0;
+          }
+        }
+
+        asteroids.forEach((asteroid, i) => {
+          asteroid.position.y -= 0.02;
+          asteroid.rotation.x += 0.01;
+          asteroid.rotation.y += 0.005;
+
+          if (asteroid.position.y < -10) {
+            asteroid.position.y = 15;
+            asteroid.position.x = (Math.random() - 0.5) * 25;
+            asteroid.position.z = (Math.random() - 0.5) * 15;
+          }
+        });
+
         particles.rotation.y += 0.001;
         particles.children.forEach((particle: THREE.Object3D, i: number) => {
           particle.position.y += Math.sin(Date.now() * 0.001 + i) * 0.002;
         });
 
         blinkTimer++;
-        if (blinkTimer > 180 && !isBlinking) {
+        if (blinkTimer > 180 && !isBlinking && !isBlastingOff) {
           isBlinking = true;
           leftEye.scale.y = 0.1;
           rightEye.scale.y = 0.1;
