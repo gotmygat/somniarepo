@@ -78,7 +78,7 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
     rightPupil.position.set(0.3, 0.2, 1.0);
     creature.add(rightPupil);
 
-    const wingGeometry = new THREE.BoxGeometry(0.1, 1.5, 0.8);
+    const wingGeometry = new THREE.BoxGeometry(0.08, 1.5, 0.7);
     const wingMaterial = new THREE.MeshPhongMaterial({
       color: 0x6b5ce7,
       transparent: true,
@@ -86,15 +86,15 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
     });
 
     const leftWing = new THREE.Mesh(wingGeometry, wingMaterial);
-    leftWing.position.set(-1.5, 0, -0.3);
-    leftWing.rotation.z = Math.PI / 6;
-    leftWing.rotation.y = Math.PI / 8;
+    leftWing.position.set(-1.1, 0, -0.5);
+    leftWing.rotation.z = Math.PI / 5;
+    leftWing.rotation.y = Math.PI / 6;
     creature.add(leftWing);
 
     const rightWing = new THREE.Mesh(wingGeometry, wingMaterial);
-    rightWing.position.set(1.5, 0, -0.3);
-    rightWing.rotation.z = -Math.PI / 6;
-    rightWing.rotation.y = -Math.PI / 8;
+    rightWing.position.set(1.1, 0, -0.5);
+    rightWing.rotation.z = -Math.PI / 5;
+    rightWing.rotation.y = -Math.PI / 6;
     creature.add(rightWing);
 
     scene.add(creature);
