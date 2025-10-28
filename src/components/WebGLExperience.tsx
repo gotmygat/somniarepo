@@ -86,13 +86,15 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
     });
 
     const leftWing = new THREE.Mesh(wingGeometry, wingMaterial);
-    leftWing.position.set(-1.2, 0, 0);
+    leftWing.position.set(-1.5, 0, -0.3);
     leftWing.rotation.z = Math.PI / 6;
+    leftWing.rotation.y = Math.PI / 8;
     creature.add(leftWing);
 
     const rightWing = new THREE.Mesh(wingGeometry, wingMaterial);
-    rightWing.position.set(1.2, 0, 0);
+    rightWing.position.set(1.5, 0, -0.3);
     rightWing.rotation.z = -Math.PI / 6;
+    rightWing.rotation.y = -Math.PI / 8;
     creature.add(rightWing);
 
     scene.add(creature);

@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { Copy, Check } from 'lucide-react';
 
 export default function HeroSection() {
   const [scrollY, setScrollY] = useState(0);
+  const [copied, setCopied] = useState(false);
+  const contractAddress = "Coming Soon";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +31,14 @@ export default function HeroSection() {
 
     return () => clearInterval(interval);
   }, [phrases.length]);
+
+  const handleCopy = () => {
+    if (contractAddress !== "Coming Soon") {
+      navigator.clipboard.writeText(contractAddress);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -71,20 +82,53 @@ export default function HeroSection() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 1 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8"
+              className="flex flex-col items-center justify-center gap-6 pt-8"
             >
-              <a
-                href="#network"
-                className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-lg font-semibold hover:scale-105 transition-transform duration-300 shadow-lg shadow-blue-500/50"
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a
+                  href="#network"
+                  className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-lg font-semibold hover:scale-105 transition-transform duration-300 shadow-lg shadow-blue-500/50"
+                >
+                  Explore the Network
+                </a>
+                <a
+                  href="#ecosystem"
+                  className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-lg text-lg font-semibold hover:bg-white/20 transition-colors duration-300 border border-white/20"
+                >
+                  View Ecosystem
+                </a>
+                <a
+                  href="https://swap.reverie.network"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg text-lg font-semibold hover:scale-105 transition-transform duration-300 shadow-lg shadow-green-500/50"
+                >
+                  Buy Now
+                </a>
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 1.3 }}
+                className="flex items-center gap-2 px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg"
               >
-                Explore the Network
-              </a>
-              <a
-                href="#ecosystem"
-                className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-lg text-lg font-semibold hover:bg-white/20 transition-colors duration-300 border border-white/20"
-              >
-                View Ecosystem
-              </a>
+                <span className="text-white/60 text-sm">Contract:</span>
+                <code className="text-white font-mono text-sm">{contractAddress}</code>
+                {contractAddress !== "Coming Soon" && (
+                  <button
+                    onClick={handleCopy}
+                    className="p-1 hover:bg-white/10 rounded transition-colors"
+                    aria-label="Copy contract address"
+                  >
+                    {copied ? (
+                      <Check className="w-4 h-4 text-green-400" />
+                    ) : (
+                      <Copy className="w-4 h-4 text-white/60" />
+                    )}
+                  </button>
+                )}
+              </motion.div>
             </motion.div>
 
             <motion.div
