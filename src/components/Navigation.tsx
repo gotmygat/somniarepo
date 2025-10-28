@@ -94,12 +94,12 @@ export default function Navigation() {
               <span>Community</span>
               <ExternalLink size={14} />
             </a>
-            <a
-              href="#launch"
+            <Link
+              to="/launch"
               className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:opacity-90 transition-opacity"
             >
               Launch App
-            </a>
+            </Link>
           </div>
 
           <button
@@ -136,12 +136,12 @@ export default function Navigation() {
                   </div>
                 </div>
               ))}
-              <a
-                href="#launch"
+              <Link
+                to="/launch"
                 className="block w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-center"
               >
                 Launch App
-              </a>
+              </Link>
             </div>
           </motion.div>
         )}
