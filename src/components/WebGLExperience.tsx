@@ -216,10 +216,6 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
 
     let blinkTimer = 0;
     let isBlinking = false;
-    let blastOffTimer = 0;
-    let isBlastingOff = false;
-    let blastOffPhase = 0;
-    const originalCreatureZ = 0;
     let toTheMoonPhase = 0;
     let isToTheMoon = false;
     let scrollTargetX = 0;
@@ -270,38 +266,8 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
             }
           }
         } else {
-          if (!isBlastingOff) {
-            creature.position.x += (scrollTargetX - creature.position.x) * 0.05;
-            creature.position.y += (scrollTargetY - creature.position.y) * 0.05;
-          }
-
-          blastOffTimer++;
-          if (blastOffTimer > 300 && !isBlastingOff) {
-            isBlastingOff = true;
-            blastOffPhase = 0;
-          }
-
-          if (isBlastingOff) {
-            blastOffPhase++;
-            if (blastOffPhase < 120) {
-              creature.position.z -= 0.15;
-              creature.position.y += Math.sin(blastOffPhase * 0.05) * 0.02;
-              leftFlame.scale.y = 2 + Math.sin(blastOffPhase * 0.3) * 0.5;
-              rightFlame.scale.y = 2 + Math.sin(blastOffPhase * 0.3) * 0.5;
-            } else if (blastOffPhase < 180) {
-              const returnProgress = (blastOffPhase - 120) / 60;
-              creature.position.z = -18 + (returnProgress * 18);
-              creature.position.y = Math.sin(returnProgress * Math.PI) * 2;
-            } else {
-              creature.position.z = originalCreatureZ;
-              creature.position.y = scrollTargetY;
-              creature.position.x = scrollTargetX;
-              leftFlame.scale.y = 1;
-              rightFlame.scale.y = 1;
-              isBlastingOff = false;
-              blastOffTimer = 0;
-            }
-          }
+          creature.position.x += (scrollTargetX - creature.position.x) * 0.05;
+          creature.position.y += (scrollTargetY - creature.position.y) * 0.05;
         }
 
         asteroids.forEach((asteroid, i) => {
@@ -322,7 +288,7 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
         });
 
         blinkTimer++;
-        if (blinkTimer > 180 && !isBlinking && !isBlastingOff) {
+        if (blinkTimer > 180 && !isBlinking) {
           isBlinking = true;
           leftEye.scale.y = 0.1;
           rightEye.scale.y = 0.1;
