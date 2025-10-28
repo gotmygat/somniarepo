@@ -216,10 +216,14 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
 
     let blinkTimer = 0;
     let isBlinking = false;
+    let blastOffTimer = 0;
+    let isBlastingOff = false;
+    let blastOffPhase = 0;
+    const originalCreatureZ = 0;
     let toTheMoonPhase = 0;
     let isToTheMoon = false;
-    let mouseTargetX = 0;
-    let mouseTargetY = 0;
+    let scrollTargetX = 0;
+    let scrollTargetY = 0;
 
     triggerToTheMoonAnimation = () => {
       if (!isToTheMoon) {
@@ -266,8 +270,38 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
             }
           }
         } else {
-          creature.position.x += (mouseTargetX - creature.position.x) * 0.05;
-          creature.position.y += (mouseTargetY - creature.position.y) * 0.05;
+          if (!isBlastingOff) {
+            creature.position.x += (scrollTargetX - creature.position.x) * 0.05;
+            creature.position.y += (scrollTargetY - creature.position.y) * 0.05;
+          }
+
+          blastOffTimer++;
+          if (blastOffTimer > 300 && !isBlastingOff) {
+            isBlastingOff = true;
+            blastOffPhase = 0;
+          }
+
+          if (isBlastingOff) {
+            blastOffPhase++;
+            if (blastOffPhase < 120) {
+              creature.position.z -= 0.15;
+              creature.position.y += Math.sin(blastOffPhase * 0.05) * 0.02;
+              leftFlame.scale.y = 2 + Math.sin(blastOffPhase * 0.3) * 0.5;
+              rightFlame.scale.y = 2 + Math.sin(blastOffPhase * 0.3) * 0.5;
+            } else if (blastOffPhase < 180) {
+              const returnProgress = (blastOffPhase - 120) / 60;
+              creature.position.z = -18 + (returnProgress * 18);
+              creature.position.y = Math.sin(returnProgress * Math.PI) * 2;
+            } else {
+              creature.position.z = originalCreatureZ;
+              creature.position.y = scrollTargetY;
+              creature.position.x = scrollTargetX;
+              leftFlame.scale.y = 1;
+              rightFlame.scale.y = 1;
+              isBlastingOff = false;
+              blastOffTimer = 0;
+            }
+          }
         }
 
         asteroids.forEach((asteroid, i) => {
@@ -304,15 +338,20 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
       }
     };
 
-    const handleMouseMoveForCreature = (e: MouseEvent) => {
-      if (!sceneRef.current?.isDragging) {
-        const x = (e.clientX / window.innerWidth) * 2 - 1;
-        const y = -(e.clientY / window.innerHeight) * 2 + 1;
+    const handleScroll = () => {
+      const scrollProgress = Math.min(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight), 1);
 
-        mouseTargetX = x * 3;
-        mouseTargetY = y * 2;
-      }
+      const startX = 0;
+      const startY = 0;
+      const endX = 4;
+      const endY = -3;
+
+      scrollTargetX = startX + (endX - startX) * scrollProgress;
+      scrollTargetY = startY + (endY - startY) * scrollProgress;
     };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
 
     const showRandomPhrase = () => {
       const randomPhrase = degenPhrases[Math.floor(Math.random() * degenPhrases.length)];
@@ -348,7 +387,6 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      handleMouseMoveForCreature(e);
       if (sceneRef.current && sceneRef.current.isDragging) {
         const deltaX = e.clientX - sceneRef.current.previousMousePosition.x;
         const deltaY = e.clientY - sceneRef.current.previousMousePosition.y;
@@ -410,6 +448,7 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll);
       renderer.domElement.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
