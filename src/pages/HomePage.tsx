@@ -1,4 +1,5 @@
 import HeroSection from '../components/HeroSection';
+import InteractiveJourney from '../components/InteractiveJourney';
 import TechnologySection from '../components/TechnologySection';
 import StatsSection from '../components/StatsSection';
 import EcosystemSection from '../components/EcosystemSection';
@@ -9,6 +10,7 @@ export default function HomePage() {
     <>
       <WebGLExperience />
       <HeroSection />
+      <InteractiveJourney />
       <TechnologySection />
       <StatsSection />
       <EcosystemSection />
