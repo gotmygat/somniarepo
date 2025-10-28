@@ -78,22 +78,53 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
     rightPupil.position.set(0.3, 0.2, 1.0);
     creature.add(rightPupil);
 
-    const wingGeometry = new THREE.BoxGeometry(0.08, 1.5, 0.6);
-    const wingMaterial = new THREE.MeshPhongMaterial({
+    const rocketBodyGeometry = new THREE.CylinderGeometry(0.15, 0.15, 0.8, 16);
+    const rocketMaterial = new THREE.MeshPhongMaterial({
       color: 0x6b5ce7,
-      transparent: true,
-      opacity: 0.7
+      metalness: 0.6,
+      shininess: 100
     });
 
-    const leftWing = new THREE.Mesh(wingGeometry, wingMaterial);
-    leftWing.position.set(-1.15, 0, 0);
-    leftWing.rotation.z = Math.PI / 6;
-    creature.add(leftWing);
+    const rocketConeGeometry = new THREE.ConeGeometry(0.15, 0.3, 16);
+    const rocketConeMaterial = new THREE.MeshPhongMaterial({
+      color: 0x8b7ce7,
+      metalness: 0.8
+    });
 
-    const rightWing = new THREE.Mesh(wingGeometry, wingMaterial);
-    rightWing.position.set(1.15, 0, 0);
-    rightWing.rotation.z = -Math.PI / 6;
-    creature.add(rightWing);
+    const flameGeometry = new THREE.ConeGeometry(0.12, 0.4, 8);
+    const flameMaterial = new THREE.MeshBasicMaterial({
+      color: 0xff6b35,
+      transparent: true,
+      opacity: 0.9
+    });
+
+    const leftRocket = new THREE.Group();
+    const leftRocketBody = new THREE.Mesh(rocketBodyGeometry, rocketMaterial);
+    const leftRocketCone = new THREE.Mesh(rocketConeGeometry, rocketConeMaterial);
+    leftRocketCone.position.y = 0.55;
+    const leftFlame = new THREE.Mesh(flameGeometry, flameMaterial);
+    leftFlame.position.y = -0.6;
+    leftFlame.rotation.x = Math.PI;
+    leftRocket.add(leftRocketBody);
+    leftRocket.add(leftRocketCone);
+    leftRocket.add(leftFlame);
+    leftRocket.position.set(-0.8, -0.6, -0.3);
+    leftRocket.rotation.z = 0.2;
+    creature.add(leftRocket);
+
+    const rightRocket = new THREE.Group();
+    const rightRocketBody = new THREE.Mesh(rocketBodyGeometry, rocketMaterial);
+    const rightRocketCone = new THREE.Mesh(rocketConeGeometry, rocketConeMaterial);
+    rightRocketCone.position.y = 0.55;
+    const rightFlame = new THREE.Mesh(flameGeometry, flameMaterial);
+    rightFlame.position.y = -0.6;
+    rightFlame.rotation.x = Math.PI;
+    rightRocket.add(rightRocketBody);
+    rightRocket.add(rightRocketCone);
+    rightRocket.add(rightFlame);
+    rightRocket.position.set(0.8, -0.6, -0.3);
+    rightRocket.rotation.z = -0.2;
+    creature.add(rightRocket);
 
     scene.add(creature);
 
