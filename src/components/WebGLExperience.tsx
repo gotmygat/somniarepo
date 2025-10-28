@@ -41,6 +41,7 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [speechBubble, setSpeechBubble] = useState<string | null>(null);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const sceneRef = useRef<{
     scene: THREE.Scene;
     camera: THREE.PerspectiveCamera;
@@ -220,6 +221,9 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
     let isToTheMoon = false;
     let scrollTargetX = 0;
     let scrollTargetY = 0;
+    let cardTargetX = 0;
+    let cardTargetY = 0;
+    let isHoveringCard = false;
 
     triggerToTheMoonAnimation = () => {
       if (!isToTheMoon) {
@@ -266,8 +270,10 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
             }
           }
         } else {
-          creature.position.x += (scrollTargetX - creature.position.x) * 0.05;
-          creature.position.y += (scrollTargetY - creature.position.y) * 0.05;
+          const targetX = isHoveringCard ? cardTargetX : scrollTargetX;
+          const targetY = isHoveringCard ? cardTargetY : scrollTargetY;
+          creature.position.x += (targetX - creature.position.x) * 0.1;
+          creature.position.y += (targetY - creature.position.y) * 0.1;
         }
 
         asteroids.forEach((asteroid, i) => {
@@ -318,6 +324,36 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
 
     window.addEventListener('scroll', handleScroll);
     handleScroll();
+
+    const handleCardHover = () => {
+      const cards = document.querySelectorAll('[data-tech-card]');
+
+      cards.forEach((card, index) => {
+        const handleMouseEnter = () => {
+          const rect = card.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+
+          const x = (centerX / window.innerWidth) * 2 - 1;
+          const y = -(centerY / window.innerHeight) * 2 + 1;
+
+          cardTargetX = x * 3;
+          cardTargetY = y * 2;
+          isHoveringCard = true;
+          setHoveredCard(index);
+        };
+
+        const handleMouseLeave = () => {
+          isHoveringCard = false;
+          setHoveredCard(null);
+        };
+
+        card.addEventListener('mouseenter', handleMouseEnter);
+        card.addEventListener('mouseleave', handleMouseLeave);
+      });
+    };
+
+    setTimeout(handleCardHover, 1000);
 
     const showRandomPhrase = () => {
       const randomPhrase = degenPhrases[Math.floor(Math.random() * degenPhrases.length)];

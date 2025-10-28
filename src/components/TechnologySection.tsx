@@ -88,6 +88,7 @@ export default function TechnologySection() {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               whileHover={{ scale: 1.02, y: -5 }}
               className="relative group"
+              data-tech-card={index}
             >
               <div className="h-full bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300">
                 <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-2xl from-blue-500 to-purple-600" />
