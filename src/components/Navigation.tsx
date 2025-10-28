@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Menu, X, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { launchToTheMoon } from './WebGLExperience';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -94,12 +95,15 @@ export default function Navigation() {
               <span>Community</span>
               <ExternalLink size={14} />
             </a>
-            <Link
-              to="/launch"
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                launchToTheMoon();
+              }}
               className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:opacity-90 transition-opacity"
             >
               Launch App
-            </Link>
+            </button>
           </div>
 
           <button
@@ -136,12 +140,15 @@ export default function Navigation() {
                   </div>
                 </div>
               ))}
-              <Link
-                to="/launch"
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  launchToTheMoon();
+                }}
                 className="block w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-center"
               >
                 Launch App
-              </Link>
+              </button>
             </div>
           </motion.div>
         )}

@@ -5,6 +5,14 @@ interface WebGLExperienceProps {
   onReady?: () => void;
 }
 
+let triggerToTheMoonAnimation: (() => void) | null = null;
+
+export const launchToTheMoon = () => {
+  if (triggerToTheMoonAnimation) {
+    triggerToTheMoonAnimation();
+  }
+};
+
 export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -187,6 +195,17 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
     let isBlastingOff = false;
     let blastOffPhase = 0;
     const originalCreatureZ = 0;
+    let toTheMoonPhase = 0;
+    let isToTheMoon = false;
+    let scrollTargetX = 0;
+    let scrollTargetY = 0;
+
+    triggerToTheMoonAnimation = () => {
+      if (!isToTheMoon) {
+        isToTheMoon = true;
+        toTheMoonPhase = 0;
+      }
+    };
 
     const animate = () => {
       requestAnimationFrame(animate);
@@ -197,30 +216,66 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
         leftRocket.rotation.z = Math.sin(Date.now() * 0.003) * 0.1 + 0.2;
         rightRocket.rotation.z = Math.sin(Date.now() * 0.003) * -0.1 - 0.2;
 
-        blastOffTimer++;
-        if (blastOffTimer > 300 && !isBlastingOff) {
-          isBlastingOff = true;
-          blastOffPhase = 0;
-        }
+        if (isToTheMoon) {
+          toTheMoonPhase++;
 
-        if (isBlastingOff) {
-          blastOffPhase++;
-          if (blastOffPhase < 120) {
-            creature.position.z -= 0.15;
-            creature.position.y += Math.sin(blastOffPhase * 0.05) * 0.02;
-            leftFlame.scale.y = 2 + Math.sin(blastOffPhase * 0.3) * 0.5;
-            rightFlame.scale.y = 2 + Math.sin(blastOffPhase * 0.3) * 0.5;
-          } else if (blastOffPhase < 180) {
-            const returnProgress = (blastOffPhase - 120) / 60;
-            creature.position.z = -18 + (returnProgress * 18);
-            creature.position.y = Math.sin(returnProgress * Math.PI) * 2;
-          } else {
-            creature.position.z = originalCreatureZ;
-            creature.position.y = 0;
-            leftFlame.scale.y = 1;
-            rightFlame.scale.y = 1;
-            isBlastingOff = false;
-            blastOffTimer = 0;
+          if (toTheMoonPhase < 60) {
+            const shakeIntensity = 0.05;
+            creature.position.x += (Math.random() - 0.5) * shakeIntensity;
+            creature.position.y += (Math.random() - 0.5) * shakeIntensity;
+
+            const smokeScale = 1 + (toTheMoonPhase / 60) * 2;
+            leftFlame.scale.y = smokeScale;
+            rightFlame.scale.y = smokeScale;
+            leftFlame.material.opacity = 0.3;
+            rightFlame.material.opacity = 0.3;
+          } else if (toTheMoonPhase < 180) {
+            const launchProgress = (toTheMoonPhase - 60) / 120;
+            creature.position.z -= 0.3;
+            creature.position.y += 0.1;
+            leftFlame.scale.y = 3 + Math.sin(toTheMoonPhase * 0.2) * 0.5;
+            rightFlame.scale.y = 3 + Math.sin(toTheMoonPhase * 0.2) * 0.5;
+            leftFlame.material.opacity = 1;
+            rightFlame.material.opacity = 1;
+
+            if (toTheMoonPhase === 179) {
+              setTimeout(() => {
+                window.location.href = '/launch';
+              }, 200);
+            }
+          }
+        } else {
+          if (!isBlastingOff) {
+            creature.position.x += (scrollTargetX - creature.position.x) * 0.05;
+            creature.position.y += (scrollTargetY - creature.position.y) * 0.05;
+          }
+
+          blastOffTimer++;
+          if (blastOffTimer > 300 && !isBlastingOff) {
+            isBlastingOff = true;
+            blastOffPhase = 0;
+          }
+
+          if (isBlastingOff) {
+            blastOffPhase++;
+            if (blastOffPhase < 120) {
+              creature.position.z -= 0.15;
+              creature.position.y += Math.sin(blastOffPhase * 0.05) * 0.02;
+              leftFlame.scale.y = 2 + Math.sin(blastOffPhase * 0.3) * 0.5;
+              rightFlame.scale.y = 2 + Math.sin(blastOffPhase * 0.3) * 0.5;
+            } else if (blastOffPhase < 180) {
+              const returnProgress = (blastOffPhase - 120) / 60;
+              creature.position.z = -18 + (returnProgress * 18);
+              creature.position.y = Math.sin(returnProgress * Math.PI) * 2;
+            } else {
+              creature.position.z = originalCreatureZ;
+              creature.position.y = scrollTargetY;
+              creature.position.x = scrollTargetX;
+              leftFlame.scale.y = 1;
+              rightFlame.scale.y = 1;
+              isBlastingOff = false;
+              blastOffTimer = 0;
+            }
           }
         }
 
@@ -257,6 +312,21 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
         renderer.render(scene, camera);
       }
     };
+
+    const handleScroll = () => {
+      const scrollProgress = Math.min(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight), 1);
+
+      const startX = 0;
+      const startY = 0;
+      const endX = 4;
+      const endY = -3;
+
+      scrollTargetX = startX + (endX - startX) * scrollProgress;
+      scrollTargetY = startY + (endY - startY) * scrollProgress;
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
 
     animate();
 
@@ -337,12 +407,14 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll);
       renderer.domElement.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
       renderer.domElement.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
+      triggerToTheMoonAnimation = null;
 
       if (container && renderer.domElement && container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
