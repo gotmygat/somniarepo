@@ -36,8 +36,8 @@ export default function TechnologySection() {
     },
     {
       icon: Shield,
-      title: 'EVM Compatible',
-      description: 'Full compatibility with Ethereum tools, libraries, and smart contracts',
+      title: 'Solana-Powered',
+      description: 'Built on Solana for unmatched speed, scalability, and low transaction costs',
       stat: 'Layer 1',
       color: 'from-green-400 to-emerald-500'
     }
@@ -73,7 +73,7 @@ export default function TechnologySection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl text-white/60 max-w-3xl mx-auto"
           >
-            A high-performance, cost-efficient EVM-compatible Layer 1 blockchain
+            A high-performance, cost-efficient Solana-based Layer 1 blockchain
             designed to power the next generation of immersive experiences
           </motion.p>
         </div>
