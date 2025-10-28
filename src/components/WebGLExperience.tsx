@@ -165,8 +165,8 @@ export default function WebGLExperience({ onReady }: WebGLExperienceProps) {
       if (sceneRef.current) {
         creature.rotation.y += 0.003;
 
-        leftWing.rotation.z = Math.sin(Date.now() * 0.003) * 0.3 + Math.PI / 6;
-        rightWing.rotation.z = Math.sin(Date.now() * 0.003) * -0.3 - Math.PI / 6;
+        leftRocket.rotation.z = Math.sin(Date.now() * 0.003) * 0.1 + 0.2;
+        rightRocket.rotation.z = Math.sin(Date.now() * 0.003) * -0.1 - 0.2;
 
         particles.rotation.y += 0.001;
         particles.children.forEach((particle: THREE.Object3D, i: number) => {
