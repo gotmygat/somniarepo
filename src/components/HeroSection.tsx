@@ -74,16 +74,16 @@ export default function HeroSection() {
               className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8"
             >
               <a
-                href="#explore"
+                href="#network"
                 className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-lg font-semibold hover:scale-105 transition-transform duration-300 shadow-lg shadow-blue-500/50"
               >
                 Explore the Network
               </a>
               <a
-                href="#docs"
+                href="#ecosystem"
                 className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-lg text-lg font-semibold hover:bg-white/20 transition-colors duration-300 border border-white/20"
               >
-                Documentation
+                View Ecosystem
               </a>
             </motion.div>
 

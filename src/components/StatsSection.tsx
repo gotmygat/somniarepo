@@ -98,10 +98,10 @@ export default function StatsSection() {
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
 
                 <div className="relative z-10">
-                  <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text mb-4">
+                  <div className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text mb-4 break-words">
                     <AnimatedCounter value={stat.value} suffix={stat.suffix} />
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-2">{stat.label}</h3>
+                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 break-words">{stat.label}</h3>
                   <p className="text-white/60 text-sm">{stat.description}</p>
                 </div>
               </div>

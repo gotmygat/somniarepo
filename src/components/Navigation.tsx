@@ -18,17 +18,17 @@ export default function Navigation() {
     {
       title: 'Developers',
       items: [
-        { label: 'Documentation', href: '#docs' },
-        { label: 'Get Started', href: '#get-started' },
-        { label: 'Tools', href: '#tools' }
+        { label: 'Documentation', href: '#ecosystem' },
+        { label: 'Get Started', href: '#network' },
+        { label: 'Tools', href: '#performance' }
       ]
     },
     {
       title: 'Ecosystem',
       items: [
-        { label: 'Metaverse Browser', href: '#browser' },
-        { label: 'Playground', href: '#playground' },
-        { label: 'Creators', href: '#creators' }
+        { label: 'Overview', href: '#ecosystem' },
+        { label: 'Technology', href: '#network' },
+        { label: 'Performance', href: '#performance' }
       ]
     }
   ];
