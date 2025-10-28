@@ -69,6 +69,7 @@ export default function Footer() {
                   <li key={link.label}>
                     <Link
                       to={link.href}
+                      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                       className="text-white/60 hover:text-white transition-colors text-sm"
                     >
                       {link.label}
