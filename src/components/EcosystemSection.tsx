@@ -91,7 +91,7 @@ export default function EcosystemSection() {
                   </div>
 
                   <a
-                    href={`#${item.title.toLowerCase().replace(/\s+/g, '-')}`}
+                    href="#network"
                     className={`inline-flex items-center px-6 py-3 bg-gradient-to-r ${item.gradient} text-white rounded-lg font-semibold hover:scale-105 transition-transform duration-300`}
                   >
                     Learn More
@@ -116,16 +116,16 @@ export default function EcosystemSection() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="#get-started"
+                href="#network"
                 className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-lg font-semibold hover:scale-105 transition-transform duration-300 shadow-lg shadow-blue-500/30"
               >
                 Get Started
               </a>
               <a
-                href="#docs"
+                href="#performance"
                 className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-lg text-lg font-semibold hover:bg-white/20 transition-colors duration-300 border border-white/20"
               >
-                View Documentation
+                View Performance
               </a>
             </div>
           </div>

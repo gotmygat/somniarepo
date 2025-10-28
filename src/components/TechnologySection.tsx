@@ -119,10 +119,10 @@ export default function TechnologySection() {
           className="mt-16 text-center"
         >
           <a
-            href="#architecture"
+            href="#performance"
             className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-lg font-semibold hover:scale-105 transition-transform duration-300 shadow-lg shadow-blue-500/30"
           >
-            Explore Architecture
+            View Performance
           </a>
         </motion.div>
       </motion.div>
