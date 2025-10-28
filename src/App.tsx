@@ -1,29 +1,35 @@
-import { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
-import HeroSection from './components/HeroSection';
-import TechnologySection from './components/TechnologySection';
-import StatsSection from './components/StatsSection';
-import EcosystemSection from './components/EcosystemSection';
 import Footer from './components/Footer';
-
-const WebGLExperience = lazy(() => import('./components/WebGLExperience'));
+import HomePage from './pages/HomePage';
+import DocumentationPage from './pages/DocumentationPage';
+import ToolsPage from './pages/ToolsPage';
+import GrantProgramsPage from './pages/GrantProgramsPage';
+import AboutPage from './pages/AboutPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsPage from './pages/TermsPage';
+import DisclaimerPage from './pages/DisclaimerPage';
 
 function App() {
   return (
-    <div className="relative bg-black min-h-screen">
-      <Suspense fallback={<div className="fixed inset-0 bg-[#0a0a0f]" />}>
-        <WebGLExperience />
-      </Suspense>
-
-      <div className="relative z-20">
-        <Navigation />
-        <HeroSection />
-        <TechnologySection />
-        <StatsSection />
-        <EcosystemSection />
-        <Footer />
+    <Router>
+      <div className="relative bg-black min-h-screen">
+        <div className="relative z-20">
+          <Navigation />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/documentation" element={<DocumentationPage />} />
+            <Route path="/tools" element={<ToolsPage />} />
+            <Route path="/grants" element={<GrantProgramsPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/privacy" element={<PrivacyPolicyPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/disclaimer" element={<DisclaimerPage />} />
+          </Routes>
+          <Footer />
+        </div>
       </div>
-    </div>
+    </Router>
   );
 }
 

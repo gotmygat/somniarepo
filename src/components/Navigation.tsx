@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Menu, X, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,25 +11,28 @@ export default function Navigation() {
     {
       title: 'Technology',
       items: [
-        { label: 'Network Info', href: '#network' },
-        { label: 'Performance', href: '#performance' },
-        { label: 'Architecture', href: '#architecture' }
+        { label: 'Network Info', href: '/#network' },
+        { label: 'Performance', href: '/#performance' },
+        { label: 'Architecture', href: '/#network' },
+        { label: 'Whitepaper', href: '/#performance' }
       ]
     },
     {
       title: 'Developers',
       items: [
-        { label: 'Documentation', href: '#ecosystem' },
-        { label: 'Get Started', href: '#network' },
-        { label: 'Tools', href: '#performance' }
+        { label: 'Documentation', href: '/documentation' },
+        { label: 'Get Started', href: '/documentation' },
+        { label: 'API Reference', href: '/documentation' },
+        { label: 'Tools & SDKs', href: '/tools' }
       ]
     },
     {
       title: 'Ecosystem',
       items: [
-        { label: 'Overview', href: '#ecosystem' },
-        { label: 'Technology', href: '#network' },
-        { label: 'Performance', href: '#performance' }
+        { label: 'Metaverse Browser', href: '/#ecosystem' },
+        { label: 'Creator Playground', href: '/#ecosystem' },
+        { label: 'Community', href: '/#ecosystem' },
+        { label: 'Grant Programs', href: '/grants' }
       ]
     }
   ];
@@ -38,12 +42,12 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-8">
-            <a href="/" className="flex items-center space-x-2">
+            <Link to="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">R</span>
               </div>
               <span className="text-white font-bold text-xl">REVERIE</span>
-            </a>
+            </Link>
 
             <div className="hidden md:flex items-center space-x-1">
               {navItems.map((item) => (

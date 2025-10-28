@@ -1,50 +1,51 @@
 import { Github, Twitter, MessageCircle, Mail } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
   const footerSections = [
     {
       title: 'Technology',
       links: [
-        { label: 'Network Info', href: '#network' },
-        { label: 'Performance', href: '#performance' },
-        { label: 'Architecture', href: '#architecture' },
-        { label: 'Whitepaper', href: '#whitepaper' }
+        { label: 'Network Info', href: '/#network' },
+        { label: 'Performance', href: '/#performance' },
+        { label: 'Architecture', href: '/#network' },
+        { label: 'Whitepaper', href: '/#performance' }
       ]
     },
     {
       title: 'Developers',
       links: [
-        { label: 'Documentation', href: '#docs' },
-        { label: 'Get Started', href: '#get-started' },
-        { label: 'API Reference', href: '#api' },
-        { label: 'Tools & SDKs', href: '#tools' }
+        { label: 'Documentation', href: '/documentation' },
+        { label: 'Get Started', href: '/documentation' },
+        { label: 'API Reference', href: '/documentation' },
+        { label: 'Tools & SDKs', href: '/tools' }
       ]
     },
     {
       title: 'Ecosystem',
       links: [
-        { label: 'Metaverse Browser', href: '#browser' },
-        { label: 'Creator Playground', href: '#playground' },
-        { label: 'Community', href: '#community' },
-        { label: 'Grant Programs', href: '#grants' }
+        { label: 'Metaverse Browser', href: '/#ecosystem' },
+        { label: 'Creator Playground', href: '/#ecosystem' },
+        { label: 'Community', href: '/#ecosystem' },
+        { label: 'Grant Programs', href: '/grants' }
       ]
     },
     {
       title: 'Company',
       links: [
-        { label: 'About', href: '#about' },
-        { label: 'Blog', href: '#blog' },
-        { label: 'Careers', href: '#careers' },
-        { label: 'Contact', href: '#contact' }
+        { label: 'About', href: '/about' },
+        { label: 'Blog', href: '/#ecosystem' },
+        { label: 'Careers', href: '/about' },
+        { label: 'Contact', href: '/about' }
       ]
     },
     {
       title: 'Legal',
       links: [
-        { label: 'Privacy Policy', href: '#privacy' },
-        { label: 'Terms of Service', href: '#terms' },
-        { label: 'Cookie Policy', href: '#cookies' },
-        { label: 'Disclaimer', href: '#disclaimer' }
+        { label: 'Privacy Policy', href: '/privacy' },
+        { label: 'Terms of Service', href: '/terms' },
+        { label: 'Cookie Policy', href: '/privacy' },
+        { label: 'Disclaimer', href: '/disclaimer' }
       ]
     }
   ];
@@ -66,12 +67,12 @@ export default function Footer() {
               <ul className="space-y-2">
                 {section.links.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
+                    <Link
+                      to={link.href}
                       className="text-white/60 hover:text-white transition-colors text-sm"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
