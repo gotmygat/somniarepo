@@ -90,15 +90,14 @@ export default function EcosystemSection() {
                     ))}
                   </div>
 
-                  <button
-                    onClick={() => {
-                      const section = document.querySelector('#network');
-                      section?.scrollIntoView({ behavior: 'smooth' });
-                    }}
+                  <a
+                    href={item.title === 'Developer Tools' ? '/tools' : item.title === 'Community Hub' ? 'https://discord.gg/reverie' : '/documentation'}
+                    target={item.title === 'Community Hub' ? '_blank' : undefined}
+                    rel={item.title === 'Community Hub' ? 'noopener noreferrer' : undefined}
                     className={`inline-flex items-center px-6 py-3 bg-gradient-to-r ${item.gradient} text-white rounded-lg font-semibold hover:scale-105 transition-transform duration-300 cursor-pointer`}
                   >
                     Learn More
-                  </button>
+                  </a>
                 </div>
               </div>
             </motion.div>
